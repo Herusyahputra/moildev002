@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>moildev.Moildev &mdash; Moildev 4.0 2022 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Moildev 4.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_references.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Moildev 4.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">moildev.Moildev</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for moildev.Moildev</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.dll</span> <span class="kn">import</span> <span class="n">MoilCV</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+
+<div class="viewcode-block" id="Moildev"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev">[docs]</a><span class="k">class</span> <span class="nc">Moildev</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_camera_parameter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">camera_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Before the ensuing functions can function properly,</span>
+<span class="sd">        the camera parameter must be configured at the start of the program.</span>
+<span class="sd">        The camera parameter is the outcome of the MOIL laboratory&#39;s calibration camera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_camera_parameter: *.json file</span>
+<span class="sd">            camera_type : the name of the camera type used (use if yore pass the parameter using *.json file)</span>
+<span class="sd">            cameraName : the name of the camera used</span>
+<span class="sd">            cameraFov : camera field of view (FOV)</span>
+<span class="sd">            sensor_width : size of sensor width</span>
+<span class="sd">            sensor_height : size of sensor height</span>
+<span class="sd">            Icx : center image in x-axis</span>
+<span class="sd">            Icy : center image in y-axis</span>
+<span class="sd">            ratio : the value of the ratio image</span>
+<span class="sd">            imageWidth : the size of width image</span>
+<span class="sd">            imageHeight : the size of height image</span>
+<span class="sd">            calibrationRatio : the value of calibration ratio</span>
+<span class="sd">            parameter0 .. parameter5 : intrinsic fisheye camera parameter get from calibration</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            for more detail, please reference https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Moildev</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__alpha_to_rho_table</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rho_to_alpha_table</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__camera_fov</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_width</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_height</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ratio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__calibration_ratio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">file_camera_parameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwarg</span> <span class="o">==</span> <span class="p">{}:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pass the argument with camera parameter file with json extension (*.json),</span><span class="se">\n</span><span class="s2">&quot;</span>
+                      <span class="s2">&quot;see detail documentation here https://github.com/perseverance-tech-tw/moildev&quot;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwarg</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;camera_name&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;camera_fov&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__camera_fov</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;sensor_width&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_width</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;sensor_height&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_height</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;icx&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;icy&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;ratio&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__ratio</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;image_width&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;image_height&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;calibration_ratio&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__calibration_ratio</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;parameter_0&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;parameter_1&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;parameter_2&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;parameter_3&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;parameter_4&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;parameter_5&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span> <span class="o">=</span> <span class="n">value</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__camera_fov</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_width</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_height</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__ratio</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__calibration_ratio</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;You&#39;re not passing the complete parameter. please refer to the documentation here &quot;</span>
+                                  <span class="s2">&quot;https://github.com/perseverance-tech-tw/moildev &quot;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__init_alpha_rho_table</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__import_moildev</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__setCamera_parameter</span><span class="p">(</span><span class="n">file_camera_parameter</span><span class="p">,</span> <span class="n">camera_type</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__init_alpha_rho_table</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__import_moildev</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__setCamera_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">cameraType</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set up the configuration of the camera parameter</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parameter: the *.json file</span>
+<span class="sd">            cameraType: type of the camera</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">parameter</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cameraType</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s2">&quot;cameraName&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__camera_fov</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s2">&quot;cameraFov&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;cameraFov&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="mi">220</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_width</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;cameraSensorWidth&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_height</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;cameraSensorHeight&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;iCx&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;iCy&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__ratio</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;ratio&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;imageWidth&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;imageHeight&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__calibration_ratio</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;calibrationRatio&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;parameter0&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;parameter1&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;parameter2&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;parameter3&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;parameter4&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cameraType</span><span class="p">][</span><span class="s1">&#39;parameter5&#39;</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;cameraName&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">cameraType</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">parameter</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;cameraName&quot;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__camera_fov</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;cameraFov&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;cameraFov&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="mi">220</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_width</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;cameraSensorWidth&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_height</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;cameraSensorHeight&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;iCx&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;iCy&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__ratio</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;imageWidth&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;imageHeight&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__calibration_ratio</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;calibrationRatio&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;parameter0&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;parameter1&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;parameter2&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;parameter3&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;parameter4&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;parameter5&#39;</span><span class="p">]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Please Check your parameter file. </span><span class="se">\n</span><span class="s2">&quot;</span>
+                                  <span class="s2">&quot;If inside the file has multiple camera parameter, typing the name of camera!!</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                  <span class="s2">&quot;see detail documentation here https://github.com/perseverance-tech-tw/moildev</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                  <span class="s2">&quot;or you can email to &#39;perseverance.tech.tw@gmail.com&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init_alpha_rho_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create list for initial corresponding alpha to rho(height image).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Initial alpha and rho table.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1800</span><span class="p">):</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__alpha_to_rho_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calibration_ratio</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1800</span><span class="p">:</span>
+            <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__alpha_to_rho_table</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rho_to_alpha_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">3600</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__rho_to_alpha_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">__import_moildev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create moildev instance from Moildev SDK share object library.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Moildev object (private attribute for this class)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__create_maps</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span> <span class="o">=</span> <span class="n">MoilCV</span><span class="o">.</span><span class="n">MoilCV</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_width</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sensor_height</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ratio</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__calibration_ratio</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__create_maps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create Maps image from zeroes matrix.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Zeroes matrix same size with original image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span><span class="p">,</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Moildev.version"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.version">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Showing the information of the version moildev library.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Moildev version information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">MoilCV</span><span class="o">.</span><span class="n">version</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">camera_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get camera name used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Camera name (string)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__camera_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">camera_fov</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get Field of View (FoV) from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            FoV camera (int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__camera_fov</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">icx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get center image x-axis from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Image center X (int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">icy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get center image y-axis from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Image center Y(int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">image_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the width of the image used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            image width(int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">image_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the height of the image used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            image height(int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_height</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">param_0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of calibration parameter_0 from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parameter_0 (float)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_0</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">param_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of calibration parameter_1 from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parameter_1 (float)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">param_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of calibration parameter_2 from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parameter_2 (float)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_2</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">param_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of calibration parameter_3 from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parameter_3 (float)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_3</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">param_4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of calibration parameter_4 from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parameter_4 (float)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_4</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">param_5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of calibration parameter_5 from camera used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parameter_5 (float)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parameter_5</span>
+
+<div class="viewcode-block" id="Moildev.maps_anypoint_mode1"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.maps_anypoint_mode1">[docs]</a>    <span class="k">def</span> <span class="nf">maps_anypoint_mode1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">zoom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a pair of X-Y Maps for the specified alpha, beta and zoom parameters,</span>
+<span class="sd">        and then utilize the resulting X-Y Maps to remap the original fisheye image to the target angle image.</span>
+<span class="sd">        This function has 2 mode to generate maps anypoint, mode 1 is for tube application and</span>
+<span class="sd">        mode 2 usually for car application</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: value of zenith distance(float).</span>
+<span class="sd">            beta: value of azimuthal distance based on cartography system(float)</span>
+<span class="sd">            zoom: value of zoom(float)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            mapX: the mapping matrices X</span>
+<span class="sd">            mapY: the mapping matrices Y</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">beta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">+</span> <span class="mi">360</span>
+        <span class="k">if</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">110</span> <span class="ow">or</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="ow">or</span> <span class="n">beta</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">beta</span> <span class="o">&gt;</span> <span class="mi">360</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="o">-</span><span class="mi">110</span> <span class="k">if</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">110</span> <span class="k">else</span> <span class="n">alpha</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mi">110</span> <span class="k">if</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="k">else</span> <span class="n">alpha</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">beta</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">beta</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="mi">360</span> <span class="k">if</span> <span class="n">beta</span> <span class="o">&gt;</span> <span class="mi">360</span> <span class="k">else</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">AnypointM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">zoom</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span></div>
+
+<div class="viewcode-block" id="Moildev.maps_anypoint_mode2"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.maps_anypoint_mode2">[docs]</a>    <span class="k">def</span> <span class="nf">maps_anypoint_mode2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">zoom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a pair of X-Y Maps for the specified pitch, yaw, and roll also zoom parameters,</span>
+<span class="sd">        and then utilize the resulting X-Y Maps to remap the original fisheye image to the target image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pitch: pitch rotation (from -110 to 110 degree)</span>
+<span class="sd">            yaw: yaw rotation (from -110 to 110 degree)</span>
+<span class="sd">            roll: roll rotation (from -110 to 110 degree)</span>
+<span class="sd">            zoom: zoom scale (1 - 20)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            mapX: the mapping matrices X</span>
+<span class="sd">            mapY: the mapping matrices Y</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pitch</span> <span class="o">&lt;</span> <span class="o">-</span> <span class="mi">110</span> <span class="ow">or</span> <span class="n">pitch</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="ow">or</span> <span class="n">yaw</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">110</span> <span class="ow">or</span> <span class="n">yaw</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="ow">or</span> <span class="n">roll</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">110</span> <span class="ow">or</span> <span class="n">roll</span> <span class="o">&gt;</span> <span class="mi">110</span><span class="p">:</span>
+            <span class="n">pitch</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">yaw</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">roll</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pitch</span> <span class="o">=</span> <span class="o">-</span><span class="mi">110</span> <span class="k">if</span> <span class="n">pitch</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">110</span> <span class="k">else</span> <span class="n">pitch</span>
+            <span class="n">pitch</span> <span class="o">=</span> <span class="mi">110</span> <span class="k">if</span> <span class="n">pitch</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="k">else</span> <span class="n">pitch</span>
+            <span class="n">yaw</span> <span class="o">=</span> <span class="o">-</span><span class="mi">110</span> <span class="k">if</span> <span class="n">yaw</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">110</span> <span class="k">else</span> <span class="n">yaw</span>
+            <span class="n">yaw</span> <span class="o">=</span> <span class="mi">110</span> <span class="k">if</span> <span class="n">yaw</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="k">else</span> <span class="n">yaw</span>
+            <span class="n">roll</span> <span class="o">=</span> <span class="mi">110</span> <span class="k">if</span> <span class="n">roll</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="k">else</span> <span class="n">roll</span>
+            <span class="n">roll</span> <span class="o">=</span> <span class="mi">110</span> <span class="k">if</span> <span class="n">roll</span> <span class="o">&gt;</span> <span class="mi">110</span> <span class="k">else</span> <span class="n">roll</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">AnypointCar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">zoom</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span></div>
+
+<div class="viewcode-block" id="Moildev.maps_panorama_tube"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.maps_panorama_tube">[docs]</a>    <span class="k">def</span> <span class="nf">maps_panorama_tube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha_min</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To generate a pair of X-Y Maps for alpha within 0 ... alpha_max degree, the result X-Y Maps can be used later</span>
+<span class="sd">        to generate a panorama image from the original fisheye image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha_min: the minimum alpha degree given</span>
+<span class="sd">            alpha_max: the maximum alpha degree given. The recommended value is half of camera FOV. For example, use</span>
+<span class="sd">                        90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            mapX: the mapping matrices X</span>
+<span class="sd">            mapY: the mapping matrices Y</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">alpha_min</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">alpha_min</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">PanoramaTube</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">alpha_min</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span></div>
+
+<div class="viewcode-block" id="Moildev.maps_panorama_car"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.maps_panorama_car">[docs]</a>    <span class="k">def</span> <span class="nf">maps_panorama_car</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">iC_alpha_degree</span><span class="p">,</span> <span class="n">iC_beta_degree</span><span class="p">,</span> <span class="n">p_alpha_from</span><span class="p">,</span> <span class="n">p_alpha_end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To generate a pair of X-Y Maps for alpha within 0 alpha_max degree, the result X-Y Maps can be used later</span>
+<span class="sd">        to generate a panorama image from the original fisheye image. The panorama image centered at the 3D</span>
+<span class="sd">        direction with alpha = iC_alpha_degree and beta = iC_beta_degree.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha_max : max of alpha. The recommended value is half of camera FOV. For example, use</span>
+<span class="sd">                        90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</span>
+<span class="sd">            iC_alpha_degree : alpha angle of panorama center.</span>
+<span class="sd">            iC_beta_degree : beta angle of panorama center.</span>
+<span class="sd">            p_alpha_end:</span>
+<span class="sd">            p_alpha_from:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            mapX</span>
+<span class="sd">            mapY</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">PanoramaCar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">iC_alpha_degree</span><span class="p">,</span>
+                                   <span class="n">iC_beta_degree</span><span class="p">,</span> <span class="n">p_alpha_from</span><span class="p">,</span> <span class="n">p_alpha_end</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span></div>
+
+<div class="viewcode-block" id="Moildev.maps_panorama_rt"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.maps_panorama_rt">[docs]</a>    <span class="k">def</span> <span class="nf">maps_panorama_rt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">iC_alpha_degree</span><span class="p">,</span> <span class="n">iC_beta_degree</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To generate a pair of X-Y Maps for alpha within 0..alpha_max degree, the result X-Y Maps can be used later</span>
+<span class="sd">        to generate a panorama image from the original fisheye image. The panorama image centered at the 3D</span>
+<span class="sd">        direction with alpha = iC_alpha_degree and beta = iC_beta_degree.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha_max : max of alpha. The recommended value is half of camera FOV. For example, use</span>
+<span class="sd">                        90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</span>
+<span class="sd">            iC_alpha_degree : alpha angle of panorama center.</span>
+<span class="sd">            iC_beta_degree : beta angle of panorama center.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            mapX</span>
+<span class="sd">            mapY</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">PanoramaM_Rt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">iC_alpha_degree</span><span class="p">,</span> <span class="n">iC_beta_degree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span></div>
+
+<div class="viewcode-block" id="Moildev.maps_recenter"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.maps_recenter">[docs]</a>    <span class="k">def</span> <span class="nf">maps_recenter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">beta_degree</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create maps for reverse image. this can work using input panorama rotation image</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha_max: max of alpha. The recommended value is half of camera FOV. For example, use</span>
+<span class="sd">                        90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</span>
+<span class="sd">            beta_degree : beta angle.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            maps_x_reverse, maps_y_reverse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">revPanoramaMaps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">beta_degree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span></div>
+
+<div class="viewcode-block" id="Moildev.anypoint_mode1"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.anypoint_mode1">[docs]</a>    <span class="k">def</span> <span class="nf">anypoint_mode1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">zoom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate anypoint view image. for mode 1, the result rotation is betaOffset degree rotation around the</span>
+<span class="sd">        Z-axis(roll) after alphaOffset degree rotation around the X-axis(pitch). for mode 2, The result rotation</span>
+<span class="sd">        is thetaY degree rotation around the Y-axis(yaw) after thetaX degree rotation around the X-axis(pitch).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: source image given</span>
+<span class="sd">            alpha: the alpha offset that corespondent to the pitch rotation</span>
+<span class="sd">            beta: the beta offset that corespondent to the yaw rotation</span>
+<span class="sd">            zoom: decimal zoom factor, normally 1..12</span>
+<span class="sd">            mode: the mode view selected</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            anypoint image</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps_anypoint_mode1</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">zoom</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Moildev.anypoint_mode2"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.anypoint_mode2">[docs]</a>    <span class="k">def</span> <span class="nf">anypoint_mode2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">zoom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate anypoint view image. for mode 1, the result rotation is betaOffset degree rotation around the</span>
+<span class="sd">        Z-axis(roll) after alphaOffset degree rotation around the X-axis(pitch). for mode 2, The result rotation</span>
+<span class="sd">        is thetaY degree rotation around the Y-axis(yaw) after thetaX degree rotation around the X-axis(pitch).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: source image given</span>
+<span class="sd">            pitch: the alpha offset that corespondent to the pitch rotation</span>
+<span class="sd">            yaw: the beta offset that corespondent to the yaw rotation</span>
+<span class="sd">            roll: the beta offset that corespondent to the yaw rotation</span>
+<span class="sd">            zoom: decimal zoom factor, normally 1..12</span>
+
+
+<span class="sd">        Returns:</span>
+<span class="sd">            anypoint image</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps_anypoint_mode2</span><span class="p">(</span><span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">zoom</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Moildev.panorama_tube"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.panorama_tube">[docs]</a>    <span class="k">def</span> <span class="nf">panorama_tube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">alpha_min</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The panorama image</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: image source given</span>
+<span class="sd">            alpha_min:</span>
+<span class="sd">            alpha_max:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Panorama view image</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps_panorama_tube</span><span class="p">(</span><span class="n">alpha_min</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Moildev.panorama_car"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.panorama_car">[docs]</a>    <span class="k">def</span> <span class="nf">panorama_car</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function that generate a moil dash panorama image from fisheye camera.</span>
+<span class="sd">        the image can control by alpha to change the pitch direction and beta for yaw direction.</span>
+<span class="sd">        in order to select the roi, we can control by the parameter such as left, right, top, and bottom.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: input fisheye image</span>
+<span class="sd">            alpha_max:</span>
+<span class="sd">            alpha: change the pitch direction(0 ~ 180)</span>
+<span class="sd">            beta: change the yaw direction(-90 ~ 90)</span>
+<span class="sd">            left: crop the left image by scale(0 ~ 1)</span>
+<span class="sd">            right: crop the right image by scale(0 ~ 1)</span>
+<span class="sd">            top: crop the top image by scale(0 ~ 1)</span>
+<span class="sd">            bottom: crop the bottom image by scale(0 ~ 1)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Panorama image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps_panorama_car</span><span class="p">(</span><span class="n">alpha_max</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">),</span>
+                           <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">top</span> <span class="o">+</span> <span class="mf">0.3</span><span class="p">)):</span><span class="nb">round</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">top</span> <span class="o">+</span> <span class="mf">0.3</span><span class="p">))</span> <span class="o">+</span>
+                                                          <span class="nb">round</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="mf">0.3</span><span class="p">)),</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">left</span><span class="p">):</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="nb">round</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">))]</span>
+
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Moildev.recenter"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.recenter">[docs]</a>    <span class="k">def</span> <span class="nf">recenter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">iC_alpha_degree</span><span class="p">,</span> <span class="n">iC_beta_degree</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the optical point of fisheye image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: input image</span>
+<span class="sd">            alpha_max: max of alpha. The recommended value is half of camera FOV. For example, use</span>
+<span class="sd">                    90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</span>
+<span class="sd">            iC_alpha_degree: alpha angle of panorama center</span>
+<span class="sd">            iC_beta_degree: beta angle of panorama center</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            reverse image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">PanoramaM_Rt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">iC_alpha_degree</span><span class="p">,</span> <span class="n">iC_beta_degree</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map_y</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__moildev</span><span class="o">.</span><span class="n">revPanorama</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__res</span><span class="p">,</span> <span class="n">alpha_max</span><span class="p">,</span> <span class="n">iC_beta_degree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__res</span></div>
+
+<div class="viewcode-block" id="Moildev.get_alpha_from_rho"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.get_alpha_from_rho">[docs]</a>    <span class="k">def</span> <span class="nf">get_alpha_from_rho</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the alpha from rho image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rho: the value of rho given</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            alpha</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rho</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rho_to_alpha_table</span><span class="p">[</span><span class="n">rho</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">__rho_to_alpha_table</span><span class="p">[</span><span class="o">-</span><span class="n">rho</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span></div>
+
+<div class="viewcode-block" id="Moildev.get_rho_from_alpha"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.get_rho_from_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_rho_from_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get rho image from alpha given.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: the value of alpha given</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            rho image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__alpha_to_rho_table</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Moildev.get_alpha_beta"><a class="viewcode-back" href="../../api_references.html#moildev.Moildev.Moildev.get_alpha_beta">[docs]</a>    <span class="k">def</span> <span class="nf">get_alpha_beta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinateX</span><span class="p">,</span> <span class="n">coordinateY</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the alpha beta from specific coordinate image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            coordinateX:</span>
+<span class="sd">            coordinateY:</span>
+<span class="sd">            mode:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            alpha, beta (if you get none, the coordinate is out of range that can cover)</span>
+
+<span class="sd">        .. code-block :: markdown</span>
+
+<span class="sd">            please reference: https://github.com/perseverance-tech-tw/moildev</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta_x</span> <span class="o">=</span> <span class="n">coordinateX</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__icx</span>
+        <span class="n">delta_y</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">coordinateY</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span><span class="p">)</span>
+        <span class="n">range_left</span> <span class="o">=</span> <span class="n">coordinateX</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__icx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rho_from_alpha</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">range_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_width</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__icx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rho_from_alpha</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">range_left</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">coordinateX</span> <span class="o">&lt;=</span> <span class="n">range_right</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">delta_x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">delta_y</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_alpha_from_rho</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">coordinateX</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__icy</span><span class="p">:</span>
+                    <span class="n">angle</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">angle</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">delta_y</span><span class="p">,</span> <span class="n">delta_x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+                <span class="n">beta</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">-</span> <span class="n">angle</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_alpha_from_rho</span><span class="p">(</span><span class="n">delta_y</span><span class="p">)</span>
+                <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_alpha_from_rho</span><span class="p">(</span><span class="n">delta_x</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, moil-lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

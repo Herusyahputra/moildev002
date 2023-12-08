@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; Moildev 4.0 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Moildev documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Moildev 4.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#moildev-package">Moildev package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#moildev.Moildev.Moildev"><code class="docutils literal notranslate"><span class="pre">Moildev</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.version"><code class="docutils literal notranslate"><span class="pre">Moildev.version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.camera_name"><code class="docutils literal notranslate"><span class="pre">Moildev.camera_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.camera_fov"><code class="docutils literal notranslate"><span class="pre">Moildev.camera_fov</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.icx"><code class="docutils literal notranslate"><span class="pre">Moildev.icx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.icy"><code class="docutils literal notranslate"><span class="pre">Moildev.icy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.image_width"><code class="docutils literal notranslate"><span class="pre">Moildev.image_width</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.image_height"><code class="docutils literal notranslate"><span class="pre">Moildev.image_height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.param_0"><code class="docutils literal notranslate"><span class="pre">Moildev.param_0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.param_1"><code class="docutils literal notranslate"><span class="pre">Moildev.param_1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.param_2"><code class="docutils literal notranslate"><span class="pre">Moildev.param_2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.param_3"><code class="docutils literal notranslate"><span class="pre">Moildev.param_3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.param_4"><code class="docutils literal notranslate"><span class="pre">Moildev.param_4</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.param_5"><code class="docutils literal notranslate"><span class="pre">Moildev.param_5</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.maps_anypoint_mode1"><code class="docutils literal notranslate"><span class="pre">Moildev.maps_anypoint_mode1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.maps_anypoint_mode2"><code class="docutils literal notranslate"><span class="pre">Moildev.maps_anypoint_mode2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.maps_panorama_tube"><code class="docutils literal notranslate"><span class="pre">Moildev.maps_panorama_tube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.maps_panorama_car"><code class="docutils literal notranslate"><span class="pre">Moildev.maps_panorama_car()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.maps_panorama_rt"><code class="docutils literal notranslate"><span class="pre">Moildev.maps_panorama_rt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.maps_recenter"><code class="docutils literal notranslate"><span class="pre">Moildev.maps_recenter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.anypoint_mode1"><code class="docutils literal notranslate"><span class="pre">Moildev.anypoint_mode1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.anypoint_mode2"><code class="docutils literal notranslate"><span class="pre">Moildev.anypoint_mode2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.panorama_tube"><code class="docutils literal notranslate"><span class="pre">Moildev.panorama_tube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.panorama_car"><code class="docutils literal notranslate"><span class="pre">Moildev.panorama_car()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.recenter"><code class="docutils literal notranslate"><span class="pre">Moildev.recenter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.get_alpha_from_rho"><code class="docutils literal notranslate"><span class="pre">Moildev.get_alpha_from_rho()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.get_rho_from_alpha"><code class="docutils literal notranslate"><span class="pre">Moildev.get_rho_from_alpha()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moildev.Moildev.Moildev.get_alpha_beta"><code class="docutils literal notranslate"><span class="pre">Moildev.get_alpha_beta()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Moildev 4.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
+<section id="moildev-package">
+<h2>Moildev package<a class="headerlink" href="#moildev-package" title="Permalink to this heading"></a></h2>
+<p>Moildev Library is a collection of functions to developments fisheye image applications.
+Initially, this library is written for C++ programing language. In the recent decade, python is
+a programming language that is very popular for developers. That is the reason why we are developing
+the Moildev library for python.</p>
+<img alt="alternate text" class="align-center" src="_images/moildev.png" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<span class="target" id="module-moildev.Moildev"></span><dl class="py class">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Moildev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_camera_parameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwarg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Before the ensuing functions can function properly,
+the camera parameter must be configured at the start of the program.
+The camera parameter is the outcome of the MOIL laboratory’s calibration camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_camera_parameter</strong> – <a href="#id1"><span class="problematic" id="id2">*</span></a>.json file</p></li>
+<li><p><strong>camera_type</strong> – the name of the camera type used (use if yore pass the parameter using <a href="#id3"><span class="problematic" id="id4">*</span></a>.json file)</p></li>
+<li><p><strong>cameraName</strong> – the name of the camera used</p></li>
+<li><p><strong>cameraFov</strong> – camera field of view (FOV)</p></li>
+<li><p><strong>sensor_width</strong> – size of sensor width</p></li>
+<li><p><strong>sensor_height</strong> – size of sensor height</p></li>
+<li><p><strong>Icx</strong> – center image in x-axis</p></li>
+<li><p><strong>Icy</strong> – center image in y-axis</p></li>
+<li><p><strong>ratio</strong> – the value of the ratio image</p></li>
+<li><p><strong>imageWidth</strong> – the size of width image</p></li>
+<li><p><strong>imageHeight</strong> – the size of height image</p></li>
+<li><p><strong>calibrationRatio</strong> – the value of calibration ratio</p></li>
+<li><p><strong>parameter5</strong> (<em>parameter0 ..</em>) – intrinsic fisheye camera parameter get from calibration</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>for more detail, please reference https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.version">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.version" title="Permalink to this definition"></a></dt>
+<dd><p>Showing the information of the version moildev library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Moildev version information</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.camera_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camera_name</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.camera_name" title="Permalink to this definition"></a></dt>
+<dd><p>Get camera name used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Camera name (string)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.camera_fov">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camera_fov</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.camera_fov" title="Permalink to this definition"></a></dt>
+<dd><p>Get Field of View (FoV) from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>FoV camera (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.icx">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">icx</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.icx" title="Permalink to this definition"></a></dt>
+<dd><p>Get center image x-axis from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Image center X (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.icy">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">icy</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.icy" title="Permalink to this definition"></a></dt>
+<dd><p>Get center image y-axis from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Image center Y(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.image_width">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_width</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.image_width" title="Permalink to this definition"></a></dt>
+<dd><p>Get the width of the image used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image width(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.image_height">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_height</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.image_height" title="Permalink to this definition"></a></dt>
+<dd><p>Get the height of the image used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image height(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.param_0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">param_0</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.param_0" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of calibration parameter_0 from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parameter_0 (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.param_1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">param_1</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.param_1" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of calibration parameter_1 from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parameter_1 (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.param_2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">param_2</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.param_2" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of calibration parameter_2 from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parameter_2 (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.param_3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">param_3</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.param_3" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of calibration parameter_3 from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parameter_3 (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.param_4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">param_4</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.param_4" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of calibration parameter_4 from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parameter_4 (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.param_5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">param_5</span></span><a class="headerlink" href="#moildev.Moildev.Moildev.param_5" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of calibration parameter_5 from camera used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parameter_5 (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.maps_anypoint_mode1">
+<span class="sig-name descname"><span class="pre">maps_anypoint_mode1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.maps_anypoint_mode1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.maps_anypoint_mode1" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a pair of X-Y Maps for the specified alpha, beta and zoom parameters,
+and then utilize the resulting X-Y Maps to remap the original fisheye image to the target angle image.
+This function has 2 mode to generate maps anypoint, mode 1 is for tube application and
+mode 2 usually for car application</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> – value of zenith distance(float).</p></li>
+<li><p><strong>beta</strong> – value of azimuthal distance based on cartography system(float)</p></li>
+<li><p><strong>zoom</strong> – value of zoom(float)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the mapping matrices X
+mapY: the mapping matrices Y</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapX</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.maps_anypoint_mode2">
+<span class="sig-name descname"><span class="pre">maps_anypoint_mode2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.maps_anypoint_mode2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.maps_anypoint_mode2" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a pair of X-Y Maps for the specified pitch, yaw, and roll also zoom parameters,
+and then utilize the resulting X-Y Maps to remap the original fisheye image to the target image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch</strong> – pitch rotation (from -110 to 110 degree)</p></li>
+<li><p><strong>yaw</strong> – yaw rotation (from -110 to 110 degree)</p></li>
+<li><p><strong>roll</strong> – roll rotation (from -110 to 110 degree)</p></li>
+<li><p><strong>zoom</strong> – zoom scale (1 - 20)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the mapping matrices X
+mapY: the mapping matrices Y</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapX</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.maps_panorama_tube">
+<span class="sig-name descname"><span class="pre">maps_panorama_tube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.maps_panorama_tube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.maps_panorama_tube" title="Permalink to this definition"></a></dt>
+<dd><p>To generate a pair of X-Y Maps for alpha within 0 … alpha_max degree, the result X-Y Maps can be used later
+to generate a panorama image from the original fisheye image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha_min</strong> – the minimum alpha degree given</p></li>
+<li><p><strong>alpha_max</strong> – the maximum alpha degree given. The recommended value is half of camera FOV. For example, use
+90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the mapping matrices X
+mapY: the mapping matrices Y</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapX</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.maps_panorama_car">
+<span class="sig-name descname"><span class="pre">maps_panorama_car</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iC_alpha_degree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iC_beta_degree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_alpha_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_alpha_end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.maps_panorama_car"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.maps_panorama_car" title="Permalink to this definition"></a></dt>
+<dd><p>To generate a pair of X-Y Maps for alpha within 0 alpha_max degree, the result X-Y Maps can be used later
+to generate a panorama image from the original fisheye image. The panorama image centered at the 3D
+direction with alpha = iC_alpha_degree and beta = iC_beta_degree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha_max</strong> – max of alpha. The recommended value is half of camera FOV. For example, use
+90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</p></li>
+<li><p><strong>iC_alpha_degree</strong> – alpha angle of panorama center.</p></li>
+<li><p><strong>iC_beta_degree</strong> – beta angle of panorama center.</p></li>
+<li><p><strong>p_alpha_end</strong> – </p></li>
+<li><p><strong>p_alpha_from</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>mapX
+mapY</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.maps_panorama_rt">
+<span class="sig-name descname"><span class="pre">maps_panorama_rt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iC_alpha_degree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iC_beta_degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.maps_panorama_rt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.maps_panorama_rt" title="Permalink to this definition"></a></dt>
+<dd><p>To generate a pair of X-Y Maps for alpha within 0..alpha_max degree, the result X-Y Maps can be used later
+to generate a panorama image from the original fisheye image. The panorama image centered at the 3D
+direction with alpha = iC_alpha_degree and beta = iC_beta_degree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha_max</strong> – max of alpha. The recommended value is half of camera FOV. For example, use
+90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</p></li>
+<li><p><strong>iC_alpha_degree</strong> – alpha angle of panorama center.</p></li>
+<li><p><strong>iC_beta_degree</strong> – beta angle of panorama center.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>mapX
+mapY</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.maps_recenter">
+<span class="sig-name descname"><span class="pre">maps_recenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.maps_recenter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.maps_recenter" title="Permalink to this definition"></a></dt>
+<dd><p>Create maps for reverse image. this can work using input panorama rotation image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha_max</strong> – max of alpha. The recommended value is half of camera FOV. For example, use
+90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</p></li>
+<li><p><strong>beta_degree</strong> – beta angle.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>maps_x_reverse, maps_y_reverse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.anypoint_mode1">
+<span class="sig-name descname"><span class="pre">anypoint_mode1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.anypoint_mode1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.anypoint_mode1" title="Permalink to this definition"></a></dt>
+<dd><p>Generate anypoint view image. for mode 1, the result rotation is betaOffset degree rotation around the
+Z-axis(roll) after alphaOffset degree rotation around the X-axis(pitch). for mode 2, The result rotation
+is thetaY degree rotation around the Y-axis(yaw) after thetaX degree rotation around the X-axis(pitch).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – source image given</p></li>
+<li><p><strong>alpha</strong> – the alpha offset that corespondent to the pitch rotation</p></li>
+<li><p><strong>beta</strong> – the beta offset that corespondent to the yaw rotation</p></li>
+<li><p><strong>zoom</strong> – decimal zoom factor, normally 1..12</p></li>
+<li><p><strong>mode</strong> – the mode view selected</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>anypoint image</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.anypoint_mode2">
+<span class="sig-name descname"><span class="pre">anypoint_mode2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.anypoint_mode2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.anypoint_mode2" title="Permalink to this definition"></a></dt>
+<dd><p>Generate anypoint view image. for mode 1, the result rotation is betaOffset degree rotation around the
+Z-axis(roll) after alphaOffset degree rotation around the X-axis(pitch). for mode 2, The result rotation
+is thetaY degree rotation around the Y-axis(yaw) after thetaX degree rotation around the X-axis(pitch).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – source image given</p></li>
+<li><p><strong>pitch</strong> – the alpha offset that corespondent to the pitch rotation</p></li>
+<li><p><strong>yaw</strong> – the beta offset that corespondent to the yaw rotation</p></li>
+<li><p><strong>roll</strong> – the beta offset that corespondent to the yaw rotation</p></li>
+<li><p><strong>zoom</strong> – decimal zoom factor, normally 1..12</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>anypoint image</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.panorama_tube">
+<span class="sig-name descname"><span class="pre">panorama_tube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.panorama_tube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.panorama_tube" title="Permalink to this definition"></a></dt>
+<dd><p>The panorama image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – image source given</p></li>
+<li><p><strong>alpha_min</strong> – </p></li>
+<li><p><strong>alpha_max</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Panorama view image</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.panorama_car">
+<span class="sig-name descname"><span class="pre">panorama_car</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.panorama_car"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.panorama_car" title="Permalink to this definition"></a></dt>
+<dd><p>The function that generate a moil dash panorama image from fisheye camera.
+the image can control by alpha to change the pitch direction and beta for yaw direction.
+in order to select the roi, we can control by the parameter such as left, right, top, and bottom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – input fisheye image</p></li>
+<li><p><strong>alpha_max</strong> – </p></li>
+<li><p><strong>alpha</strong> – change the pitch direction(0 ~ 180)</p></li>
+<li><p><strong>beta</strong> – change the yaw direction(-90 ~ 90)</p></li>
+<li><p><strong>left</strong> – crop the left image by scale(0 ~ 1)</p></li>
+<li><p><strong>right</strong> – crop the right image by scale(0 ~ 1)</p></li>
+<li><p><strong>top</strong> – crop the top image by scale(0 ~ 1)</p></li>
+<li><p><strong>bottom</strong> – crop the bottom image by scale(0 ~ 1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Panorama image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.recenter">
+<span class="sig-name descname"><span class="pre">recenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iC_alpha_degree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iC_beta_degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.recenter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.recenter" title="Permalink to this definition"></a></dt>
+<dd><p>Change the optical point of fisheye image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – input image</p></li>
+<li><p><strong>alpha_max</strong> – max of alpha. The recommended value is half of camera FOV. For example, use
+90 for a 180 degree fisheye images and use 110 for a 220 degree fisheye images.</p></li>
+<li><p><strong>iC_alpha_degree</strong> – alpha angle of panorama center</p></li>
+<li><p><strong>iC_beta_degree</strong> – beta angle of panorama center</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>reverse image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.get_alpha_from_rho">
+<span class="sig-name descname"><span class="pre">get_alpha_from_rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.get_alpha_from_rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.get_alpha_from_rho" title="Permalink to this definition"></a></dt>
+<dd><p>Get the alpha from rho image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rho</strong> – the value of rho given</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>alpha</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.get_rho_from_alpha">
+<span class="sig-name descname"><span class="pre">get_rho_from_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.get_rho_from_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.get_rho_from_alpha" title="Permalink to this definition"></a></dt>
+<dd><p>Get rho image from alpha given.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – the value of alpha given</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>rho image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="moildev.Moildev.Moildev.get_alpha_beta">
+<span class="sig-name descname"><span class="pre">get_alpha_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinateX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinateY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moildev/Moildev.html#Moildev.get_alpha_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#moildev.Moildev.Moildev.get_alpha_beta" title="Permalink to this definition"></a></dt>
+<dd><p>Get the alpha beta from specific coordinate image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coordinateX</strong> – </p></li>
+<li><p><strong>coordinateY</strong> – </p></li>
+<li><p><strong>mode</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>alpha, beta (if you get none, the coordinate is out of range that can cover)</p>
+</dd>
+</dl>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>please reference: https://github.com/perseverance-tech-tw/moildev
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Moildev documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, moil-lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
